@@ -1,0 +1,57 @@
+{
+    "executionRoleArn": "arn:aws:iam::674577138207:role/ps/roles/iam_api_ecs_task_execution_role",
+    "taskRoleArn": "arn:aws:iam::674577138207:role/ps/roles/iam_api_ecs_task_role",
+    "family": "api_task",
+    "networkMode": "awsvpc",
+    "cpu": "1024",
+    "memory": "2048",
+    "requiresCompatibilities": ["FARGATE"],
+    "containerDefinitions": [
+      {
+        "name": "api_container",
+        "image": "<IMAGE1_NAME>",
+        "environment": [
+          {
+            "name": "APPCONFIG_ENVIRONMENT",
+            "value": "release"
+          },
+          {
+            "name": "CERTIFICATE_KEY_PATH",
+            "value": "/var/pair/api/X509.pem",
+          },
+          {
+            "name": "CERTIFICATE_ROOT_PATH",
+            "value": "/var/pair/api/isrgrootx1.pem",
+          },
+          {
+            "name": "DATABASE_HOST",
+            "value": "ps-release-cluster.5yuqz.mongodb.net",
+          },
+          {
+            "name": "DATABASE_NAME",
+            "value": "ps_release",
+          }
+        ],
+        "essential": true,
+        "portMappings": [
+          {
+            "containerPort": 8080,
+            "hostPort": 8080,
+            "protocol": "tcp"
+          }
+        ],
+        "logConfiguration": {
+          "logDriver": "awslogs",
+          "secretOptions": null,
+          "options": {
+            "awslogs-group": "/ps/ecs/api",
+            "awslogs-region": "us-east-1",
+            "awslogs-stream-prefix": "ps"
+          }
+        }
+      }
+    ],
+    "runtimePlatform": {
+      "operatingSystemFamily": "LINUX"
+    }
+  }
